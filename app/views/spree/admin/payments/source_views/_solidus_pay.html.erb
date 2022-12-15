@@ -1,0 +1,12 @@
+<fieldset>
+  <legend align="center"><%= SolidusPayAccount.model_name.human %></legend>
+
+  <div class="row">
+    <div class="col-4">
+      <dl>
+        <dt>Auth token:</dt>
+        <dd><%= payment.source.auth_token %></dd>
+      </dl>
+    </div>
+  </div>
+</fieldset>
