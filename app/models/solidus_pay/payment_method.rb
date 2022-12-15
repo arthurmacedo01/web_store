@@ -34,4 +34,8 @@ class SolidusPay::PaymentMethod < Spree::PaymentMethod
 
     void(payment.source.transaction_id)
   end
+
+  def partial_name
+    'solidus_pay'
+  end
 end
