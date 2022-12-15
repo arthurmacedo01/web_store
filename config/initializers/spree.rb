@@ -50,6 +50,9 @@ Spree.config do |config|
   #   server: Rails.env.production? ? 'production' : 'test',
   #   test_mode: !Rails.env.production?
   # )
+
+  config.environment.payment_methods << 'SolidusPay::PaymentMethod'
+
 end
 
 Spree::Backend::Config.configure do |config|
