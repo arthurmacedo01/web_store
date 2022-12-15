@@ -87,3 +87,4 @@ gem 'solidus_auth_devise' unless File.read(__FILE__).lines[__LINE__..-1].grep(/s
 
 gem 'solidus_auth_devise'
 gem 'solidus_paypal_commerce_platform'
+gem 'httparty'

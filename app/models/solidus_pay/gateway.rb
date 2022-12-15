@@ -1,6 +1,6 @@
 module SolidusPay
   class Gateway
-    API_URL = 'https://soliduspay.com/api/v1'
+    API_URL = 'https://api.mercadopago.com/V1/payments'
 
     attr_reader :api_key
 
