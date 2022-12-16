@@ -8,6 +8,32 @@
     text-align: center;
   }
 
+  &__ {
+    margin: 0 0 5rem;
+    text-align: center;
+  }
+
+  &__pix_title {
+    margin: 0 0 5rem;
+    text-align: center;
+  }
+
+  &__pix_image {
+    margin: 0 0 5rem;
+    text-align: center;
+    img {
+      max-width: 40%;
+    }
+  }
+
+  &__pix_hash {
+    color: $color-background-success;
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    margin: -2.5rem 0 3rem;
+    text-align: left;
+  }
+
   &__completed {
     color: $color-background-success;
     font-size: $font-size-base;
