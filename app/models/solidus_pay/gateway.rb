@@ -1,6 +1,6 @@
 module SolidusPay
   class Gateway
-    API_URL = 'https://api.mercadopago.com/V1/payments'
+    API_URL = 'https://api.mercadopago.com/v1'
 
     attr_reader :api_key
 
@@ -11,11 +11,17 @@ module SolidusPay
     def authorize(money, auth_token, options = {})
       response = request(
         :post,
-        "/charges",
-        payload_for_charge(money, auth_token, options).merge(capture: false),
+        "/payments",
+        payload_for_charge(money, auth_token, options),
       )
 
-      if response.success?
+      puts ">>>>>>>>>>>>>>>> aqui estão as opções >>>>>>>>"
+      print options
+      puts "esta é a resposta:"
+      print response
+
+
+      if response.success?        
         ActiveMerchant::Billing::Response.new(
           true,
           "Transaction Authorized",
@@ -28,49 +34,10 @@ module SolidusPay
           response.parsed_response['error'],
         )
       end
-    end
-
-    def purchase(money, auth_token, options = {})
-      response = request(
-        :post,
-        "/charges",
-        payload_for_charge(money, auth_token, options).merge(capture: true),
-      )
-
-      if response.success?
-        ActiveMerchant::Billing::Response.new(
-          true,
-          "Transaction Purchased",
-          {},
-          authorization: response.parsed_response['id'],
-        )
-      else
-        ActiveMerchant::Billing::Response.new(
-          false,
-          response.parsed_response['error'],
-        )
-      end
-    end
-
-    def capture(money, transaction_id, options = {})
-      response = request(
-        :post,
-        "/charges/#{transaction_id}/capture",
-        { amount: money },
-      )
-
-      if response.success?
-        ActiveMerchant::Billing::Response.new(true, "Transaction Captured")
-      else
-        ActiveMerchant::Billing::Response.new(
-          false,
-          response.parsed_response['error'],
-        )
-      end
-    end
+    end    
 
     def void(transaction_id, options = {})
-      response = request(:post, "/charges/#{transaction_id}/refunds")
+      response = request(:post, "/payments/#{transaction_id}/refunds")
 
       if response.success?
         ActiveMerchant::Billing::Response.new(true, "Transaction Voided")
@@ -85,7 +52,7 @@ module SolidusPay
     def credit(money, transaction_id, options = {})
       response = request(
         :post,
-        "/charges/#{transaction_id}/credit",
+        "/payments/#{transaction_id}/credit",
         { amount: money },
       )
 
@@ -102,25 +69,26 @@ module SolidusPay
     private
 
     def request(method, uri, body = {})
-      HTTParty.send(
-        method,
-        "#{API_URL}#{uri}",
-        headers: {
-          "Authorization" => "Bearer #{api_key}",
-          "Content-Type" => "application/json",
-          "Accept" => "application/json",
-        },
-        body: body.to_json,
+      HTTParty.send(method,
+      "#{API_URL}#{uri}",
+      headers: {
+      "Authorization" => "Bearer #{api_key}",
+      "Content-Type" => "application/json",
+      "Accept" => "application/json",
+      },
+      body: body.to_json,
       )
     end
 
     def payload_for_charge(money, auth_token, options = {})
       {
-        auth_token: auth_token,
-        amount: money,
-        currency: options[:currency],
         description: "Payment #{options[:order_id]}",
-        billing_address: options[:billing_address],
+        transaction_amount: money,
+        notification_url: "https://meu.site/notificacao_de_pagamento",
+        payment_method_id: "pix",
+        payer: {
+          email: 'test@test.com'
+        }        
       }
     end
   end
