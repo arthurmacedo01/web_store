@@ -42,6 +42,26 @@ module SolidusPay
       ActiveMerchant::Billing::Response.new(true, "Transaction Voided")
     end
 
+    def credit(money, transaction_id, options = {})
+      
+      response = request(
+        :post,
+        "/payments/#{transaction_id}/refunds",
+        { amount: money },
+      )
+
+      if response.success?
+        ActiveMerchant::Billing::Response.new(true, "Transaction Credited")
+      else
+        ActiveMerchant::Billing::Response.new(
+          false,
+          response.parsed_response['error'],
+        )
+      end
+      
+    end
+       
+
     private
 
     def request(method, uri, body = {})
@@ -67,5 +87,6 @@ module SolidusPay
         }        
       }
     end
+
   end
 end
