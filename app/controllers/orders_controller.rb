@@ -36,7 +36,7 @@ class OrdersController < StoreController
   end
 
   def get_qr_codes 
-    transaction_id = Spree::Payment.where(order_id: 30, state: "pending").first[:source_id]
+    transaction_id = Spree::Payment.where(order_id: @order[:id], state: "pending").first[:source_id]
     transaction = SolidusPay::Transaction.find(transaction_id)    
     @qr_code = transaction[:qr_code]
     @qr_code_base64 = transaction[:qr_code_base64]
