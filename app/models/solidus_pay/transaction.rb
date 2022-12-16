@@ -1,16 +1,11 @@
 class SolidusPay::Transaction < Spree::PaymentSource
   self.table_name = "solidus_pay_transactions"
 
-  # SolidusPay payments can be captured, voided and refunded.
+  # SolidusPay payments can be voided and refunded.
   def actions
-    %w(capture void credit)
+    %w(void credit)
   end
-
-  # A SolidusPay payment can be captured as long as it's in the checkout or pending state.
-  def can_capture?(payment)
-    payment.pending? || payment.checkout?
-  end
-
+  
   # We rely on the payment state machine to determine when a SolidusPay payment can be voided.
   def can_void?(payment)
     payment.can_void?

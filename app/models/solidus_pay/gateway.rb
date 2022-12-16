@@ -15,11 +15,9 @@ module SolidusPay
         payload_for_charge(money, auth_token, options),
       )
 
-      puts ">>>>>>>>>>>>>>>> aqui estão as opções >>>>>>>>"
-      print options
-      puts "esta é a resposta:"
-      print response
-
+      options[:originator].source.qr_code = response.parsed_response['point_of_interaction']['transaction_data']['qr_code']
+      options[:originator].source.qr_code_base64 = response.parsed_response['point_of_interaction']['transaction_data']['qr_code_base64']
+      options[:originator].source.save!
 
       if response.success?        
         ActiveMerchant::Billing::Response.new(
