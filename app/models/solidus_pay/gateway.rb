@@ -15,11 +15,9 @@ module SolidusPay
         payload_for_charge(money, auth_token, options),
       )
 
-      puts ">>>>>>>>>>>>>>>> aqui estão as opções >>>>>>>>"
-      print options
-      puts "esta é a resposta:"
-      print response
-
+      options[:originator].source.qr_code = response.parsed_response['point_of_interaction']['transaction_data']['qr_code']
+      options[:originator].source.qr_code_base64 = response.parsed_response['point_of_interaction']['transaction_data']['qr_code_base64']
+      options[:originator].source.save!
 
       if response.success?        
         ActiveMerchant::Billing::Response.new(
@@ -34,25 +32,21 @@ module SolidusPay
           response.parsed_response['error'],
         )
       end
-    end    
+    end
+
+    def capture(money, transaction_id, options = {})
+      ActiveMerchant::Billing::Response.new(true, "Transaction Captured")
+    end
 
     def void(transaction_id, options = {})
-      response = request(:post, "/payments/#{transaction_id}/refunds")
-
-      if response.success?
-        ActiveMerchant::Billing::Response.new(true, "Transaction Voided")
-      else
-        ActiveMerchant::Billing::Response.new(
-          false,
-          response.parsed_response['error'],
-        )
-      end
+      ActiveMerchant::Billing::Response.new(true, "Transaction Voided")
     end
 
     def credit(money, transaction_id, options = {})
+      
       response = request(
         :post,
-        "/payments/#{transaction_id}/credit",
+        "/payments/#{transaction_id}/refunds",
         { amount: money },
       )
 
@@ -64,7 +58,9 @@ module SolidusPay
           response.parsed_response['error'],
         )
       end
+      
     end
+       
 
     private
 
@@ -91,5 +87,6 @@ module SolidusPay
         }        
       }
     end
+
   end
 end
