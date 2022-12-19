@@ -24,6 +24,6 @@ class SolidusPay::Transaction < Spree::PaymentSource
 
   # SolidusPay accounts can be used to pay on future orders as well.
   def reusable?
-    true
+    false
   end
 end

@@ -43,7 +43,6 @@ module SolidusPay
     end
 
     def credit(money, transaction_id, options = {})
-      
       response = request(
         :post,
         "/payments/#{transaction_id}/refunds",
@@ -59,8 +58,7 @@ module SolidusPay
         )
       end
       
-    end
-       
+    end       
 
     private
 
