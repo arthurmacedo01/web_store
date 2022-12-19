@@ -81,7 +81,7 @@ module SolidusPay
         notification_url: "https://meu.site/notificacao_de_pagamento",
         payment_method_id: "pix",
         payer: {
-          email: 'test@test.com'
+          email: options[:email]
         }        
       }
     end
