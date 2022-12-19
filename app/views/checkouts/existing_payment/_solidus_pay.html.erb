@@ -1,6 +1,0 @@
-<tr id="<%= dom_id(wallet_payment_source, 'solidus_pay') %>">
-  <td><%= wallet_payment_source.payment_source.auth_token %></td>
-  <td>
-    <%= radio_button_tag "order[wallet_payment_source_id]", wallet_payment_source.id, default, class: "existing-cc-radio" %>
-  </td>
-</tr>
