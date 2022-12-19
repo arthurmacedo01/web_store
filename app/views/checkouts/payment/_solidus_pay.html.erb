@@ -1,6 +1,3 @@
-<% param_prefix = "payment_source[#{payment_method.id}]" %>
-
 <div class="field field-required">
-  <%= label_tag "auth_token_#{payment_method.id}", 'SolidusPay Auth Token' %>
-  <%= text_field_tag "#{param_prefix}[auth_token]", nil, { id: "auth_token_#{payment_method.id}" } %>
+  Deverá ser pago pelo QRcode que será gerado ao finalizar a compra.
 </div>
