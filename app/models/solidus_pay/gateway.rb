@@ -46,7 +46,7 @@ module SolidusPay
       response = request(
         :post,
         "/payments/#{transaction_id}/refunds",
-        { amount: money },
+        { amount: cents_to_bill(money) },
       )
 
       if response.success?
@@ -58,7 +58,8 @@ module SolidusPay
         )
       end
       
-    end       
+    end
+       
 
     private
 
@@ -77,13 +78,17 @@ module SolidusPay
     def payload_for_charge(money, auth_token, options = {})
       {
         description: "Payment #{options[:order_id]}",
-        transaction_amount: money,
+        transaction_amount: cents_to_bill(money),
         notification_url: "https://meu.site/notificacao_de_pagamento",
         payment_method_id: "pix",
         payer: {
           email: 'test@test.com'
         }        
       }
+    end
+
+    def cents_to_bill(money)
+      return  money.to_f/100      
     end
 
   end
